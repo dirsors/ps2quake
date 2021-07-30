@@ -1,0 +1,173 @@
+Only in ./WinQuake: .DS_Store
+Only in ./WinQuake: .gdb_history
+Only in ./WinQuake: Makefile.osx
+Only in ./WinQuake: Makefile.ps2
+Only in ./WinQuake: archives
+diff -u /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/common.c ./WinQuake/common.c
+--- /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/common.c	Tue Dec 21 14:53:24 1999
++++ ./WinQuake/common.c	Thu Jul  8 12:13:55 2004
+@@ -1645,7 +1645,7 @@
+ 		Sys_Error ("%s has %i files", packfile, numpackfiles);
+ 
+ 	if (numpackfiles != PAK0_COUNT)
+-		com_modified = true;    // not the original file
++		com_modified = false;    // not the original file
+ 
+ 	newfiles = Hunk_AllocName (numpackfiles * sizeof(packfile_t), "packfile");
+ 
+@@ -1774,8 +1774,11 @@
+ //
+ // start up with GAMENAME by default (id1)
+ //
++#ifdef _EE
++	COM_AddGameDirectory (va("host:"GAMENAME, basedir) );
++#else
+ 	COM_AddGameDirectory (va("%s/"GAMENAME, basedir) );
+-
++#endif
+ 	if (COM_CheckParm ("-rogue"))
+ 		COM_AddGameDirectory (va("%s/rogue", basedir) );
+ 	if (COM_CheckParm ("-hipnotic"))
+diff -u /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/console.c ./WinQuake/console.c
+--- /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/console.c	Tue Dec 21 14:53:24 1999
++++ ./WinQuake/console.c	Sun Jun 13 11:25:47 2004
+@@ -222,7 +222,7 @@
+ 		if (strlen (com_gamedir) < (MAXGAMEDIRLEN - strlen (t2)))
+ 		{
+ 			sprintf (temp, "%s%s", com_gamedir, t2);
+-			unlink (temp);
++			//unlink (temp);
+ 		}
+ 	}
+ 
+Common subdirectories: /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/data and ./WinQuake/data
+Only in ./WinQuake: debug-ppc
+Only in ./WinQuake: debug-ps2
+Common subdirectories: /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/docs and ./WinQuake/docs
+diff -u /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/draw.c ./WinQuake/draw.c
+--- /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/draw.c	Tue Dec 21 14:53:24 1999
++++ ./WinQuake/draw.c	Tue Jun  8 21:42:36 2004
+@@ -1,22 +1,22 @@
+-/*
+-Copyright (C) 1996-1997 Id Software, Inc.
+-
+-This program is free software; you can redistribute it and/or
+-modify it under the terms of the GNU General Public License
+-as published by the Free Software Foundation; either version 2
+-of the License, or (at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+-
+-See the GNU General Public License for more details.
+-
+-You should have received a copy of the GNU General Public License
+-along with this program; if not, write to the Free Software
+-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-
+-*/
++/*
++Copyright (C) 1996-1997 Id Software, Inc.
++
++This program is free software; you can redistribute it and/or
++modify it under the terms of the GNU General Public License
++as published by the Free Software Foundation; either version 2
++of the License, or (at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
++
++See the GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++
++*/
+ 
+ // draw.c -- this is the only file outside the refresh that touches the
+ // vid buffer
+@@ -109,7 +109,7 @@
+ */
+ void Draw_Init (void)
+ {
+-	int		i;
++	//int		i;
+ 
+ 	draw_chars = W_GetLumpName ("conchars");
+ 	draw_disc = W_GetLumpName ("disc");
+Common subdirectories: /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/dxsdk and ./WinQuake/dxsdk
+Common subdirectories: /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/gas2masm and ./WinQuake/gas2masm
+Only in ./WinQuake: id1
+Common subdirectories: /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/kit and ./WinQuake/kit
+diff -u /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/net_udp.c ./WinQuake/net_udp.c
+--- /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/net_udp.c	Tue Dec 21 17:40:46 1999
++++ ./WinQuake/net_udp.c	Tue Jun  8 18:40:46 2004
+@@ -1,22 +1,22 @@
+-/*
+-Copyright (C) 1996-1997 Id Software, Inc.
+-
+-This program is free software; you can redistribute it and/or
+-modify it under the terms of the GNU General Public License
+-as published by the Free Software Foundation; either version 2
+-of the License, or (at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+-
+-See the GNU General Public License for more details.
+-
+-You should have received a copy of the GNU General Public License
+-along with this program; if not, write to the Free Software
+-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+-
+-*/
++/*
++Copyright (C) 1996-1997 Id Software, Inc.
++
++This program is free software; you can redistribute it and/or
++modify it under the terms of the GNU General Public License
++as published by the Free Software Foundation; either version 2
++of the License, or (at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
++
++See the GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++
++*/
+ // net_udp.c
+ 
+ #include "quakedef.h"
+Only in ./WinQuake: osx.h
+Only in ./WinQuake: quake-1.09-ps2
+Only in ./WinQuake: release-ppc
+Common subdirectories: /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/scitech and ./WinQuake/scitech
+diff -u /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/sys_null.c ./WinQuake/sys_null.c
+--- /Users/nicolas/Documents/incoming/quake/q1source/WinQuake/sys_null.c	Tue Dec 21 17:43:40 1999
++++ ./WinQuake/sys_null.c	Thu Jul  8 12:41:49 2004
+@@ -22,6 +22,8 @@
+ #include "quakedef.h"
+ #include "errno.h"
+ 
++qboolean			isDedicated;
++
+ /*
+ ===============================================================================
+ 
+Only in ./WinQuake: sys_osx.c
+Only in ./WinQuake: sys_osx.r
+Only in ./WinQuake: sys_ps2.c
+Only in ./WinQuake: vid_osxqd.c
+Only in ./WinQuake: vid_ps2.c
+Only in ./WinQuake: vid_ps2_lib.c
+Only in ./WinQuake: vid_ps2_lib.h
+Only in /Users/nicolas/Documents/incoming/quake/q1source/WinQuake: vid_vga.c

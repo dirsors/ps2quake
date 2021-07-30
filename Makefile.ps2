@@ -1,0 +1,366 @@
+#
+# Quake Makefile for PlayStation2
+#
+# June '04 by Nicolas Plourde <nicolasplourde@hotmail.com>
+#
+# ELF only
+#
+
+VERSION=1.09
+
+ARCH=-ps2
+
+PS2SDK=/usr/local/ps2dev/ps2sdk
+MOUNT_DIR=/Users/nicolas/Documents/src/q1source/WinQuake
+
+BUILD_DEBUG_DIR=debug$(ARCH)
+BUILD_RELEASE_DIR=release$(ARCH)
+
+CC=ee-gcc
+BASE_CFLAGS=-Dstricmp=strcasecmp
+
+RELEASE_CFLAGS=$(BASE_CFLAGS) -O2 -D_EE -funroll-loops -fomit-frame-pointer -fexpensive-optimizations
+DEBUG_CFLAGS=$(BASE_CFLAGS) -g -D_EE
+LDFLAGS= -nostartfiles -T/usr/local/ps2dev/ps2sdk/ee/startup/linkfile /usr/local/ps2dev/ps2sdk/ee/startup/crt0.o -L$(PS2SDK)/ee/lib  $(EE)/ee/lib/libc.a -lm -lc -lkernel -lsyscall -lc
+
+DO_CC=$(CC) $(CFLAGS) -o $@ -c $<
+DO_AS=$(CC) $(CFLAGS) -DELF -x assembler-with-cpp -o $@ -c $<
+
+#############################################################################
+# SETUP AND BUILD
+#############################################################################
+
+TARGETS=$(BUILDDIR)/quake.elf
+
+build_debug:
+	@-mkdir $(BUILD_DEBUG_DIR)
+	$(MAKE) -f Makefile.ps2 targets BUILDDIR=$(BUILD_DEBUG_DIR) CFLAGS="$(DEBUG_CFLAGS)"
+
+build_release:
+	@-mkdir $(BUILD_RELEASE_DIR)
+	$(MAKE) -f Makefile.ps2 targets BUILDDIR=$(BUILD_RELEASE_DIR) CFLAGS="$(RELEASE_CFLAGS)"
+
+all: build_debug build_release
+
+targets: $(TARGETS)
+
+#############################################################################
+# CLIENT/SERVER
+#############################################################################
+
+QUAKE_OBJS= \
+	$(BUILDDIR)/chase.o \
+	$(BUILDDIR)/cl_demo.o \
+	$(BUILDDIR)/cl_input.o \
+	$(BUILDDIR)/cl_main.o \
+	$(BUILDDIR)/cl_parse.o \
+	$(BUILDDIR)/cl_tent.o \
+	$(BUILDDIR)/cmd.o \
+	$(BUILDDIR)/common.o \
+	$(BUILDDIR)/console.o \
+	$(BUILDDIR)/crc.o \
+	$(BUILDDIR)/cvar.o \
+	$(BUILDDIR)/draw.o \
+	$(BUILDDIR)/d_edge.o \
+	$(BUILDDIR)/d_fill.o \
+	$(BUILDDIR)/d_init.o \
+	$(BUILDDIR)/d_modech.o \
+	$(BUILDDIR)/d_part.o \
+	$(BUILDDIR)/d_polyse.o \
+	$(BUILDDIR)/d_scan.o \
+	$(BUILDDIR)/d_sky.o \
+	$(BUILDDIR)/d_sprite.o \
+	$(BUILDDIR)/d_surf.o \
+	$(BUILDDIR)/d_vars.o \
+	$(BUILDDIR)/d_zpoint.o \
+	$(BUILDDIR)/host.o \
+	$(BUILDDIR)/host_cmd.o \
+	$(BUILDDIR)/keys.o \
+	$(BUILDDIR)/menu.o \
+	$(BUILDDIR)/mathlib.o \
+	$(BUILDDIR)/model.o \
+	$(BUILDDIR)/nonintel.o \
+	$(BUILDDIR)/pr_cmds.o \
+	$(BUILDDIR)/pr_edict.o \
+	$(BUILDDIR)/pr_exec.o \
+	$(BUILDDIR)/r_aclip.o \
+	$(BUILDDIR)/r_alias.o \
+	$(BUILDDIR)/r_bsp.o \
+	$(BUILDDIR)/r_light.o \
+	$(BUILDDIR)/r_draw.o \
+	$(BUILDDIR)/r_efrag.o \
+	$(BUILDDIR)/r_edge.o \
+	$(BUILDDIR)/r_misc.o \
+	$(BUILDDIR)/r_main.o \
+	$(BUILDDIR)/r_sky.o \
+	$(BUILDDIR)/r_sprite.o \
+	$(BUILDDIR)/r_surf.o \
+	$(BUILDDIR)/r_part.o \
+	$(BUILDDIR)/r_vars.o \
+	$(BUILDDIR)/screen.o \
+	$(BUILDDIR)/sbar.o \
+	$(BUILDDIR)/sv_main.o \
+	$(BUILDDIR)/sv_phys.o \
+	$(BUILDDIR)/sv_move.o \
+	$(BUILDDIR)/sv_user.o \
+	$(BUILDDIR)/zone.o	\
+	$(BUILDDIR)/view.o	\
+	$(BUILDDIR)/wad.o \
+	$(BUILDDIR)/world.o \
+	$(BUILDDIR)/cd_null.o \
+	$(BUILDDIR)/net_vcr.o \
+	$(BUILDDIR)/net_main.o \
+	$(BUILDDIR)/net_loop.o \
+	$(BUILDDIR)/net_none.o \
+	$(BUILDDIR)/sys_ps2.o \
+	$(BUILDDIR)/snd_null.o \
+	$(BUILDDIR)/in_null.o \
+	$(BUILDDIR)/vid_ps2_lib.o \
+	$(BUILDDIR)/vid_ps2.o 
+
+
+$(BUILDDIR)/quake.elf : $(QUAKE_OBJS)
+	$(CC) -o $(@) $(QUAKE_OBJS) $(LDFLAGS)
+
+##
+
+$(BUILDDIR)/chase.o :               $(MOUNT_DIR)/chase.c
+	$(DO_CC)
+
+$(BUILDDIR)/cl_demo.o :             $(MOUNT_DIR)/cl_demo.c
+	$(DO_CC)
+
+$(BUILDDIR)/cl_input.o :            $(MOUNT_DIR)/cl_input.c
+	$(DO_CC)
+
+$(BUILDDIR)/cl_main.o :             $(MOUNT_DIR)/cl_main.c
+	$(DO_CC)
+
+$(BUILDDIR)/cl_parse.o :            $(MOUNT_DIR)/cl_parse.c
+	$(DO_CC)
+
+$(BUILDDIR)/cl_tent.o :             $(MOUNT_DIR)/cl_tent.c
+	$(DO_CC)
+
+$(BUILDDIR)/cmd.o :                 $(MOUNT_DIR)/cmd.c
+	$(DO_CC)
+
+$(BUILDDIR)/common.o :              $(MOUNT_DIR)/common.c
+	$(DO_CC)
+
+$(BUILDDIR)/console.o :             $(MOUNT_DIR)/console.c
+	$(DO_CC)
+
+$(BUILDDIR)/crc.o :                 $(MOUNT_DIR)/crc.c
+	$(DO_CC)
+
+$(BUILDDIR)/cvar.o :                $(MOUNT_DIR)/cvar.c
+	$(DO_CC)
+
+$(BUILDDIR)/draw.o :                $(MOUNT_DIR)/draw.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_edge.o :              $(MOUNT_DIR)/d_edge.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_fill.o :              $(MOUNT_DIR)/d_fill.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_init.o :              $(MOUNT_DIR)/d_init.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_modech.o :            $(MOUNT_DIR)/d_modech.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_part.o :              $(MOUNT_DIR)/d_part.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_polyse.o :            $(MOUNT_DIR)/d_polyse.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_scan.o :              $(MOUNT_DIR)/d_scan.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_sky.o :               $(MOUNT_DIR)/d_sky.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_sprite.o :            $(MOUNT_DIR)/d_sprite.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_surf.o :              $(MOUNT_DIR)/d_surf.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_vars.o :              $(MOUNT_DIR)/d_vars.c
+	$(DO_CC)
+
+$(BUILDDIR)/d_zpoint.o :            $(MOUNT_DIR)/d_zpoint.c
+	$(DO_CC)
+
+$(BUILDDIR)/host.o :                $(MOUNT_DIR)/host.c
+	$(DO_CC)
+
+$(BUILDDIR)/host_cmd.o :            $(MOUNT_DIR)/host_cmd.c
+	$(DO_CC)
+
+$(BUILDDIR)/keys.o :                $(MOUNT_DIR)/keys.c
+	$(DO_CC)
+
+$(BUILDDIR)/menu.o :                $(MOUNT_DIR)/menu.c
+	$(DO_CC)
+
+$(BUILDDIR)/mathlib.o :             $(MOUNT_DIR)/mathlib.c
+	$(DO_CC)
+
+$(BUILDDIR)/model.o :               $(MOUNT_DIR)/model.c
+	$(DO_CC)
+
+$(BUILDDIR)/nonintel.o :            $(MOUNT_DIR)/nonintel.c
+	$(DO_CC)
+
+$(BUILDDIR)/pr_cmds.o :             $(MOUNT_DIR)/pr_cmds.c
+	$(DO_CC)
+
+$(BUILDDIR)/pr_edict.o :            $(MOUNT_DIR)/pr_edict.c
+	$(DO_CC)
+
+$(BUILDDIR)/pr_exec.o :             $(MOUNT_DIR)/pr_exec.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_aclip.o :             $(MOUNT_DIR)/r_aclip.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_alias.o :             $(MOUNT_DIR)/r_alias.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_bsp.o :               $(MOUNT_DIR)/r_bsp.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_light.o :             $(MOUNT_DIR)/r_light.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_draw.o :              $(MOUNT_DIR)/r_draw.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_efrag.o :             $(MOUNT_DIR)/r_efrag.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_edge.o :              $(MOUNT_DIR)/r_edge.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_misc.o :              $(MOUNT_DIR)/r_misc.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_main.o :              $(MOUNT_DIR)/r_main.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_sky.o :               $(MOUNT_DIR)/r_sky.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_sprite.o :            $(MOUNT_DIR)/r_sprite.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_surf.o :              $(MOUNT_DIR)/r_surf.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_part.o :              $(MOUNT_DIR)/r_part.c
+	$(DO_CC)
+
+$(BUILDDIR)/r_vars.o :              $(MOUNT_DIR)/r_vars.c
+	$(DO_CC)
+
+$(BUILDDIR)/screen.o :              $(MOUNT_DIR)/screen.c
+	$(DO_CC)
+
+$(BUILDDIR)/sbar.o :                $(MOUNT_DIR)/sbar.c
+	$(DO_CC)
+
+$(BUILDDIR)/sv_main.o :             $(MOUNT_DIR)/sv_main.c
+	$(DO_CC)
+
+$(BUILDDIR)/sv_phys.o :             $(MOUNT_DIR)/sv_phys.c
+	$(DO_CC)
+
+$(BUILDDIR)/sv_move.o :             $(MOUNT_DIR)/sv_move.c
+	$(DO_CC)
+
+$(BUILDDIR)/sv_user.o :             $(MOUNT_DIR)/sv_user.c
+	$(DO_CC)
+
+$(BUILDDIR)/zone.o :                $(MOUNT_DIR)/zone.c
+	$(DO_CC)
+
+$(BUILDDIR)/view.o :                $(MOUNT_DIR)/view.c
+	$(DO_CC)
+
+$(BUILDDIR)/wad.o :                 $(MOUNT_DIR)/wad.c
+	$(DO_CC)
+
+$(BUILDDIR)/world.o :               $(MOUNT_DIR)/world.c
+	$(DO_CC)
+
+$(BUILDDIR)/cd_null.o :             $(MOUNT_DIR)/cd_null.c
+	$(DO_CC)
+
+$(BUILDDIR)/net_loop.o :            $(MOUNT_DIR)/net_loop.c
+	$(DO_CC)
+
+$(BUILDDIR)/net_main.o :            $(MOUNT_DIR)/net_main.c
+	$(DO_CC)
+
+$(BUILDDIR)/net_vcr.o :            $(MOUNT_DIR)/net_vcr.c
+	$(DO_CC)
+
+$(BUILDDIR)/net_none.o :             $(MOUNT_DIR)/net_none.c
+	$(DO_CC)
+
+$(BUILDDIR)/sys_ps2.o :            $(MOUNT_DIR)/sys_ps2.c
+	$(DO_CC)
+
+$(BUILDDIR)/snd_null.o :            $(MOUNT_DIR)/snd_null.c
+	$(DO_CC)
+
+$(BUILDDIR)/in_null.o :             $(MOUNT_DIR)/in_null.c
+	$(DO_CC)
+
+$(BUILDDIR)/vid_ps2_lib.o :	    $(MOUNT_DIR)/vid_ps2_lib.c
+	$(DO_CC)
+
+$(BUILDDIR)/vid_ps2.o :            $(MOUNT_DIR)/vid_ps2.c
+	$(DO_CC)
+
+#############################################################################
+# TAR
+#############################################################################
+
+# Make RPMs.  You need to be root to make this work
+RPMDIR = /var/tmp/quake-$(VERSION)
+
+tar:
+	if [ ! -d archives ];then mkdir archives;fi
+	$(MAKE) copyfiles COPYDIR=$(RPMDIR)
+	cd $(RPMDIR); tar cvf q2ded-$(VERSION)-$(ARCH).tar *
+	cd $(RPMDIR); compress q2ded-$(VERSION)-$(ARCH).tar
+	mv $(RPMDIR)/*.tar.Z archives/.
+	rm -rf $(RPMDIR)
+
+copyfiles:
+	-mkdirhier $(COPYDIR)
+	cp $(BUILD_RELEASE_DIR)/quake.elf $(COPYDIR)
+	strip $(COPYDIR)/quake
+	cp $(MOUNT_DIR)/README.PS2 $(COPYDIR)/README.PS2
+
+#############################################################################
+# MISC
+#############################################################################
+
+clean: clean-debug clean-release
+
+clean-debug:
+	$(MAKE) -f Makefile.ps2 clean2 BUILDDIR=$(BUILD_DEBUG_DIR) CFLAGS="$(DEBUG_CFLAGS)"
+
+clean-release:
+	$(MAKE) -f Makefile.ps2 clean2 BUILDDIR=$(BUILD_RELEASE_DIR) CFLAGS="$(DEBUG_CFLAGS)"
+
+clean2:
+	-rm -f $(QUAKE_OBJS)
+
